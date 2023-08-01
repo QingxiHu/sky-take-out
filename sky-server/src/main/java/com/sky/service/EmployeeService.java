@@ -14,5 +14,10 @@ public interface EmployeeService extends IService<Employee> {
      */
     Employee login(EmployeeLoginDTO employeeLoginDTO);
 
+    /**
+     * 添加员工
+     * @param employeeDTO
+     * @return
+     */
     boolean save(EmployeeDTO employeeDTO);
 }

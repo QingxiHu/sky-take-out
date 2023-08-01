@@ -64,6 +64,12 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return employee;
     }
 
+
+    /**
+     * 添加员工
+     * @param employeeDTO
+     * @return
+     */
     @Override
     public boolean save(EmployeeDTO employeeDTO) {
 
