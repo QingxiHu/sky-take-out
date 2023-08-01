@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -14,12 +15,14 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,12 +127,37 @@ public class EmployeeController {
     @ApiOperation("启用禁用员工账号")
     public Result<String> status(@PathVariable Integer status, Long id) {
 
-        Employee employee = new Employee();
-        employee.setStatus(status);
-        employee.setId(id);
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
         employeeService.updateById(employee);
 
         return Result.success("success");
     }
 
+    /**
+     * 根据Id查询员工信息
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据Id查询用户信息")
+    public Result<Employee> selectById(@PathVariable Long id) {
+
+        Employee employee = employeeService.getById(id);
+
+        return Result.success(employee);
+    }
+
+    /**
+     * 修改员工信息
+     */
+    @PutMapping
+    @ApiOperation("修改员工信息")
+    public Result<String> update(@RequestBody Employee employee) {
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeService.updateById(employee);
+
+        return Result.success();
+    }
 }

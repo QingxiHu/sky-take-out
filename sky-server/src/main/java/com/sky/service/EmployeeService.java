@@ -20,4 +20,5 @@ public interface EmployeeService extends IService<Employee> {
      * @return
      */
     boolean save(EmployeeDTO employeeDTO);
+
 }
