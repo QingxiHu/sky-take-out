@@ -9,11 +9,17 @@ import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import com.sky.service.DishService;
 import com.sky.service.SetmealService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author Administrator
@@ -32,7 +38,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     /**
      * 删除分类
      * @param id
-     * @return
      */
     @Override
     public void removeById(Long id) {
@@ -55,4 +60,5 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         super.removeById(id);
     }
+
 }
