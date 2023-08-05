@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -106,5 +108,33 @@ public class DishController {
         dishService.removeByIds(ids);
 
         return Result.success("删除成功");
+    }
+
+    /**
+     * 根据Id查询菜品以及菜品口味
+     * @param id
+     * @return
+     */
+    @ApiOperation("根据Id查询菜品以及菜品口味")
+    @GetMapping("/{id}")
+    public Result<DishVO> selectById(@PathVariable Long id) {
+
+        DishVO dishVO = dishService.getWithFlavor(id);
+
+        return Result.success(dishVO);
+    }
+
+    /**
+     * 修改菜品及其口味
+     * @param dishDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改菜品及其口味")
+    public Result<Object> update(@RequestBody DishDTO dishDTO) {
+
+        dishService.updateWithFlavor(dishDTO);
+
+        return Result.success();
     }
 }
