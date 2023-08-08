@@ -1,6 +1,7 @@
 package com.sky.controller.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
@@ -50,5 +51,12 @@ public class ShoppingCartController {
         wrapper.eq(ShoppingCart::getUserId, BaseContext.getCurrentId());
         List<ShoppingCart> list = shoppingCartService.list(wrapper);
         return Result.success(list);
+    }
+
+    @DeleteMapping("/clean")
+    @ApiOperation("清除全部购物车商品")
+    public Result<Object> clean() {
+        shoppingCartService.remove(null);
+        return Result.success();
     }
 }
