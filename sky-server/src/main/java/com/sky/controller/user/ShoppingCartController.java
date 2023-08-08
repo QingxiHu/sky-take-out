@@ -1,5 +1,7 @@
 package com.sky.controller.user;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
 import com.sky.result.Result;
@@ -8,10 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Administrator
@@ -40,5 +41,14 @@ public class ShoppingCartController {
        shoppingCartService.addShoppingCart(shoppingCartDTO);
 
         return Result.success();
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("查询购物车")
+    public Result<List<ShoppingCart>> list() {
+        LambdaQueryWrapper<ShoppingCart> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ShoppingCart::getUserId, BaseContext.getCurrentId());
+        List<ShoppingCart> list = shoppingCartService.list(wrapper);
+        return Result.success(list);
     }
 }
