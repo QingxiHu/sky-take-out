@@ -79,4 +79,53 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
             super.save(shoppingCart);
         }
     }
+
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+        Long dishId = shoppingCartDTO.getDishId();
+        Long setmealId = shoppingCartDTO.getSetmealId();
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+
+        LambdaQueryWrapper<ShoppingCart> dishIdWrapper = new LambdaQueryWrapper<>();
+        dishIdWrapper.eq(ShoppingCart::getDishId, dishId);
+
+        LambdaQueryWrapper<ShoppingCart> setmealIdWrapper = new LambdaQueryWrapper<>();
+        setmealIdWrapper.eq(ShoppingCart::getSetmealId, setmealId);
+
+
+
+        // 判断删除的是否是菜品
+        if (dishId != null) {
+            // 判断购物车中菜品数量
+
+            shoppingCart = super.getOne(dishIdWrapper);
+            Integer number = shoppingCart.getNumber();
+
+            // 如果购物车中菜品数量大于一，那么只需要减去数量
+            if (number > 1) {
+                // 此时应该调用update方法更新表中的number字段
+                shoppingCart.setNumber(number - 1);
+                super.updateById(shoppingCart);
+            } else {
+                // 如果购物车中菜品数量小于二, 此时认为删除菜品
+                super.remove(dishIdWrapper);
+            }
+        }else {
+            // 此时删除的应该是套餐
+            // 判断购物车中套餐数量
+            shoppingCart = super.getOne(setmealIdWrapper);
+            Integer number = shoppingCart.getNumber();
+
+            // 如果购物车中套餐数量大于一，那么只需要减去数量
+            if (number > 1) {
+                // 此时应该调用update方法更新表中的number字段
+                shoppingCart.setNumber(number - 1);
+                super.updateById(shoppingCart);
+            } else {
+                // 如果购物车中套餐数量小于二, 此时认为删除套餐
+                super.remove(setmealIdWrapper);
+            }
+        }
+    }
 }
